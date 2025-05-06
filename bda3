@@ -1,0 +1,22 @@
+DELIMITER $$
+
+CREATE PROCEDURE RelatorioDiarioCompras()
+BEGIN
+    -- Criar a consulta para contar a quantidade de produtos comprados por dia
+    SELECT 
+        DATE(data_compra) AS data,
+        id_produto,
+        SUM(quantidade) AS total_comprado
+    FROM 
+        compras
+    WHERE 
+        data_compra >= CURDATE() -- Filtra para compras feitas no dia atual
+    GROUP BY 
+        DATE(data_compra), id_produto
+    ORDER BY 
+        data_compra, id_produto;
+END $$
+
+DELIMITER ;
+
+CALL RelatorioDiarioCompras();
